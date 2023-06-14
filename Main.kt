@@ -3,6 +3,7 @@ package minesweeper
 fun main() {
     val field = Field(9, 9)
     val fieldHandler = FieldHandler(field)
-    fieldHandler.setRandomMines(10)
+    print("How many mines do you want on the field? ")
+    fieldHandler.setRandomMines(readln().toInt())
     fieldHandler.printField()
 }
