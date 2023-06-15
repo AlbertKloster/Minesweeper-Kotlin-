@@ -5,5 +5,5 @@ fun main() {
     val fieldHandler = FieldHandler(field)
     print("How many mines do you want on the field? ")
     fieldHandler.setRandomMines(readln().toInt())
-    fieldHandler.printField()
+    fieldHandler.printFieldWithMineNumbers()
 }
