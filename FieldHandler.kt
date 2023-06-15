@@ -5,7 +5,7 @@ import kotlin.random.Random
 class FieldHandler(private val field: Field) {
     fun setRandomMines(number: Int) {
         var mines = number
-        while(mines > 0) {
+        while (mines > 0) {
             val row = Random.nextInt(0, field.rows)
             val column = Random.nextInt(0, field.columns)
             val cell = field.array[row][column]
@@ -16,27 +16,29 @@ class FieldHandler(private val field: Field) {
         }
     }
 
-    fun printField() {
-        for (row in field.array) {
-            for (cell in row) {
-                print(cell.cellType.symbol)
+    fun setNumbers() {
+        for (row in field.array.indices) {
+            for (column in field.array[row].indices) {
+                val cell = field.array[row][column]
+                val mineNumber = getMineNumberByCoordinate(Coordinate(row, column))
+                if (cell.cellType == CellType.FREE && mineNumber > 0) {
+                    cell.cellSymbol = CellSymbol.getSymbol(mineNumber.toString())
+                }
             }
-            println()
         }
     }
 
-    fun printFieldWithMineNumbers() {
+    fun printField() {
+        println(" │123456789│")
+        println("—│—————————│")
         for (row in field.array.indices) {
+            print("${row + 1}│")
             for (column in field.array[row].indices) {
-                if (field.array[row][column].cellType == CellType.FREE) {
-                    val mineNumber = getMineNumberByCoordinate(Coordinate(row, column))
-                    print(if (mineNumber == 0) CellType.FREE.symbol else mineNumber)
-                } else {
-                    print(field.array[row][column].cellType.symbol)
-                }
+                print(field.array[row][column].cellSymbol.symbol)
             }
-            println()
+            println("|")
         }
+        println("—│—————————│")
     }
 
     private fun getMineNumberByCoordinate(coordinate: Coordinate): Int {
@@ -80,6 +82,58 @@ class FieldHandler(private val field: Field) {
 
     private fun getMineDownRight(coordinate: Coordinate): Int {
         return if (coordinate.row == field.rows - 1 || coordinate.column == field.columns - 1) 0 else if (field.array[coordinate.row + 1][coordinate.column + 1].cellType == CellType.MINE) 1 else 0
+    }
+
+    fun setMark(coordinate: Coordinate) {
+        val cell = getCellByCoordinate(coordinate)
+        when (cell.cellSymbol) {
+            CellSymbol.DOT -> cell.cellSymbol = CellSymbol.ASTERISK
+            CellSymbol.ASTERISK -> cell.cellSymbol = CellSymbol.DOT
+            else -> throw RuntimeException("There is a number here!")
+        }
+    }
+
+    private fun getCellByCoordinate(coordinate: Coordinate): Cell {
+        return field.array[coordinate.row][coordinate.column]
+    }
+
+    fun getGameState(): GameState {
+        if (getNumberOfMines() != getNumberOfAsterisks()) {
+            return GameState.PLAY
+        }
+
+        for (row in field.array) {
+            for (cell in row) {
+                if (cell.cellType == CellType.MINE && cell.cellSymbol != CellSymbol.ASTERISK) {
+                    return GameState.PLAY
+                }
+            }
+        }
+        return GameState.END
+    }
+
+    private fun getNumberOfMines(): Int {
+        var count = 0
+        for (row in field.array) {
+            for (cell in row) {
+                if (cell.cellType == CellType.MINE) {
+                    count++
+                }
+            }
+        }
+        return count
+    }
+
+    private fun getNumberOfAsterisks(): Int {
+        var count = 0
+        for (row in field.array) {
+            for (cell in row) {
+                if (cell.cellSymbol == CellSymbol.ASTERISK) {
+                    count++
+                }
+            }
+        }
+        return count
     }
 
 }
