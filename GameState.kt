@@ -1,5 +1,5 @@
 package minesweeper
 
 enum class GameState {
-    PLAY, END
+    PLAY, WON, LOST
 }

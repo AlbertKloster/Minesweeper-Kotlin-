@@ -4,6 +4,7 @@ enum class CellSymbol(val symbol: String) {
     DOT("."),
     ASTERISK("*"),
     X("X"),
+    SLASH("/"),
     ONE("1"),
     TWO("2"),
     THREE("3"),

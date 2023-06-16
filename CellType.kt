@@ -1,5 +1,5 @@
 package minesweeper
 
-enum class CellType() {
-    FREE, MINE;
+enum class CellType {
+    HIDDEN, FREE, MINE;
 }

@@ -1,5 +1,5 @@
 package minesweeper
 
 class Field(val rows: Int, val columns: Int) {
-    val array = Array(rows) { Array(columns) { Cell(CellType.FREE, CellSymbol.DOT)} }
+    val array = Array(rows) { Array(columns) { Cell(CellType.HIDDEN, CellSymbol.DOT)} }
 }

@@ -10,13 +10,15 @@ class Input {
         return string.toInt()
     }
 
-    fun getCoordinate(): Coordinate {
-        print("Set/delete mines marks (x and y coordinates): ")
+
+
+    fun getCoordinateAndCommand(): CoordinateAndCommand {
+        print("Set/unset mines marks or claim a cell as free: ")
         val string = readln().trim()
-        if (!string.matches(Regex("[1-9] [1-9]"))) {
+        if (!string.matches(Regex("[1-9] [1-9] (free|mine)"))) {
             throw RuntimeException("Wrong coordinates!")
         }
-        val (x, y) = string.split(" ")
-        return Coordinate(y.toInt() - 1, x.toInt() - 1)
+        val (x, y, command) = string.split(" ")
+        return CoordinateAndCommand(Coordinate(y.toInt() - 1, x.toInt() - 1), Command.getCommand(command))
     }
 }

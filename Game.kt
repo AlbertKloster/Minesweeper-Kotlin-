@@ -17,14 +17,17 @@ class Game {
         var gameState = GameState.PLAY
         while (gameState == GameState.PLAY) {
             try {
-                val coordinate = input.getCoordinate()
-                fieldHandler.setMark(coordinate)
+                val coordinateAndCommand = input.getCoordinateAndCommand()
+                when (coordinateAndCommand.command) {
+                    Command.FREE -> fieldHandler.setFree(coordinateAndCommand.coordinate)
+                    Command.MINE -> fieldHandler.setMark(coordinateAndCommand.coordinate)
+                }
                 gameState = fieldHandler.getGameState()
                 fieldHandler.printField()
             } catch (e: RuntimeException) {
                 println(e.message)
             }
         }
-        println("Congratulations! You found all the mines!")
+        println(if (gameState == GameState.WON) "Congratulations! You found all the mines!" else "You stepped on a mine and failed!")
     }
 }
